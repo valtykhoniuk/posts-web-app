@@ -4,6 +4,7 @@
     <my-button @click="showDialog" style="margin: 15px 0"
       >Create post</my-button
     >
+    <my-button @click="fetchPosts">Get posts</my-button>
     <my-dialog v-model:show="dialogVisible">
       <post-form @create="createPost" />
     </my-dialog>
@@ -14,6 +15,7 @@
 <script>
 import PostList from "./components/PostList.vue";
 import PostForm from "./components/PostForm.vue";
+import axios from "axios";
 
 export default {
   components: {
@@ -23,12 +25,7 @@ export default {
 
   data() {
     return {
-      posts: [
-        { id: 1, title: "Javascript 1", body: "Description of post" },
-        { id: 2, title: "Javascript 2", body: "Description of post 2" },
-        { id: 3, title: "Javascript 3", body: "Description of post 3" },
-        { id: 4, title: "Javascript 4", body: "Description of post 4" },
-      ],
+      posts: [],
       dialogVisible: false,
     };
   },
@@ -45,6 +42,18 @@ export default {
 
     showDialog() {
       this.dialogVisible = true;
+    },
+
+    async fetchPosts() {
+      try {
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+        );
+        this.posts = response.data;
+        console.log(response);
+      } catch (error) {
+        alert("Error");
+      }
     },
   },
 };
