@@ -16,7 +16,8 @@
       v-if="!isPostLoading"
     />
     <div v-else>Loading..</div>
-    <div class="page__wrapper">
+    <div ref="observer" class="observer"></div>
+    <!-- <div class="page__wrapper">
       <div
         v-for="pageNumber in totalPages"
         :key="page"
@@ -28,7 +29,7 @@
       >
         {{ pageNumber }}
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -74,10 +75,9 @@ export default {
       this.dialogVisible = true;
     },
 
-    changePage(pageNumber) {
-      this.page = pageNumber;
-      this.fetchPosts();
-    },
+    // changePage(pageNumber) {
+    //   this.page = pageNumber;
+    // },
 
     async fetchPosts() {
       try {
@@ -101,10 +101,45 @@ export default {
         this.isPostLoading = false;
       }
     },
+
+    async loadMorePosts() {
+      try {
+        this.pageNumber += 1;
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: this.pageNumber,
+              _limit: this.limit,
+            },
+          }
+        );
+        this.totalPages = Math.ceil(
+          response.headers["x-total-count"] / this.limit
+        );
+        this.posts = [...this.posts, ...response.data];
+      } catch (error) {
+        alert("Error");
+        this.isPostLoading = false;
+      }
+    },
   },
 
   mounted() {
     this.fetchPosts();
+
+    const options = {
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+
+    const callback = (entries, observer) => {
+      if (entries[0].isIntersecting && this.pageNumber < this.totalPages) {
+        this.loadMorePosts();
+      }
+    };
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer);
   },
 
   // watch: {
@@ -128,6 +163,12 @@ export default {
         post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
+  },
+
+  watch: {
+    // page() {
+    //   this.fetchPosts();
+    // },
   },
 };
 </script>
