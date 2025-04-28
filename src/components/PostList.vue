@@ -21,6 +21,8 @@ export default {
     PostItem,
   },
 
+  emits: ["remove"],
+
   props: {
     posts: {
       type: Array,

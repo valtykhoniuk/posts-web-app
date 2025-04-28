@@ -4,7 +4,7 @@
     <my-input v-focus v-model="searchQuery" placeholder="Search..." />
     <div class="app__btns">
       <my-button @click="showDialog">Create post</my-button>
-      <my-select v-model="selectedSord" :options="sortedOptions"></my-select>
+      <my-select v-model="selectedSort" :options="sortedOptions"></my-select>
     </div>
 
     <my-dialog v-model:show="dialogVisible">
@@ -49,7 +49,7 @@ export default {
       posts: [],
       dialogVisible: false,
       isPostLoading: false,
-      selectedSord: "",
+      selectedSort: "",
       searchQuery: "",
       pageNumber: 1,
       limit: 10,
@@ -143,7 +143,7 @@ export default {
   },
 
   // watch: {
-  //   selectedSord(newValue) {
+  //   selectedSort(newValue) {
   //     this.posts.sort((post1, post2) => {
   //       return post1[newValue]?.localeCompare(post2[newValue]);
   //     });
@@ -152,8 +152,8 @@ export default {
   computed: {
     sortedPosts() {
       return [...this.posts].sort((post1, post2) => {
-        return post1[this.selectedSord]?.localeCompare(
-          post2[this.selectedSord]
+        return post1[this.selectedSort]?.localeCompare(
+          post2[this.selectedSort]
         );
       });
     },
