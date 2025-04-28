@@ -1,10 +1,18 @@
 <template>
   <div>
     <h1>Page with posts</h1>
-    <!-- <my-input v-focus v-model="searchQuery" placeholder="Search..." /> -->
+    <my-input
+      :model-value="searchQuery"
+      @update:model-value="setSearchQuery"
+      placeholder="Search..."
+    />
     <div class="app__btns">
       <my-button @click="showDialog">Create post</my-button>
-      <!-- <my-select v-model="selectedSort" :options="sortedOptions"></my-select> -->
+      <my-select
+        :model-value="selectedSort"
+        @update:model-value="setSelectedSort"
+        :options="sortedOptions"
+      ></my-select>
     </div>
 
     <my-dialog v-model:show="dialogVisible">
@@ -47,6 +55,8 @@ export default {
   methods: {
     ...mapMutations({
       setPage: "post/setPage",
+      setSearchQuery: "post/setSearchQuery",
+      setSelectedSort: "post/setSelectedSort",
     }),
 
     ...mapActions({

@@ -44,7 +44,7 @@ export const postModule = {
       state.pageNumber = page;
     },
 
-    setselectedSort(state, selectedSort) {
+    setSelectedSort(state, selectedSort) {
       state.selectedSort = selectedSort;
     },
 
